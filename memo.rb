@@ -15,22 +15,33 @@ if memo_type == 1
     puts "メモしたい内容を記入してください"
     puts "入力が完了したらctrl+dを押してください"
 
-    memos = gets.chomp.strip
+    memos = []
+    while line = STDIN.gets
+    break if line.chomp == nil
+    memos << line.chomp
+    end
     CSV.open("#{file_name}.csv", "w") do |csv|
-    csv << [memos]
-end
+    memos.each {|memo|csv << [memo]}
+    end
 
 elsif memo_type == 2
     puts "既存のメモを編集します。拡張子を除いた既存ファイル名を入力してください。"
     file_name = gets.chomp.strip
     puts "現在のメモ内容"
-    p CSV.read("#{file_name}.csv") 
-    
+    existing_memos = CSV.read("#{file_name}.csv") 
+    existing_memos.each_with_index do |memo, index| 
+    puts "#{memo.join(', ')}" 
+    end
     puts "編集後のメモを入力してください"
+    puts "入力が完了したらctrl+dを押してください"
 
-    new_memo = gets.chomp.strip
-    CSV.open("#{file_name}.csv","w")do|memo|
-    memo << [new_memo]
+    new_memos = []
+    while line = STDIN.gets
+    break if line.chomp == nil
+    new_memos << line.chomp
+    end
+    CSV.open("#{file_name}.csv","w")do|csv|
+    new_memos.each {|memo|csv << [memo]}
 end
 
 else
